@@ -1,0 +1,17 @@
+{
+  "name": "@saas/api",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@saas/eslint-config": "workspace:*",
+    "@saas/prettier": "workspace:*",
+    "@saas/tsconfig": "workspace:*",
+    "@types/node": "^25.2.2",
+    "tsx": "^4.21.0"
+  },
+  "prettier": "@saas/prettier",
+  "eslintConfig": {
+    "extends": [
+      "@saas/eslint-config"
+    ]
+  }
+}
