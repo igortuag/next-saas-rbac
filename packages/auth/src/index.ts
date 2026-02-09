@@ -1,5 +1,22 @@
-const test = "Hello world!";
+import { AbilityBuilder, createMongoAbility, type CreateAbility, type ForcedSubject, type MongoAbility } from '@casl/ability'
 
-export function greet() {
-  console.log(test);
-}
+const actions = ['manage', 'invite', 'delete'] as const
+const subjects = ['User', "all"] as const
+
+type AppAbilities = [
+  typeof actions[number],
+  (
+    | typeof subjects[number]
+    | ForcedSubject<Exclude<typeof subjects[number], 'all'>>
+  )
+]
+
+export type AppAbility = MongoAbility<AppAbilities>
+export const createAppAbility = createMongoAbility
+
+const { build, can, cannot } = new AbilityBuilder<AppAbility>(createAppAbility)
+
+can('invite', 'User')
+cannot('delete', 'User')
+
+export const ability = build()
