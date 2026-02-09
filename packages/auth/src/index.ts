@@ -1,7 +1,7 @@
 import { AbilityBuilder, createMongoAbility, type CreateAbility, type ForcedSubject, type MongoAbility } from '@casl/ability'
 
-const actions = ['manage', 'create', 'read', 'update', 'delete', 'invite'] as const
-const subjects = ['all', 'User'] as const
+const actions = ['manage', 'invite', 'delete'] as const
+const subjects = ['User', "all"] as const
 
 type AppAbilities = [
   typeof actions[number],
@@ -17,6 +17,6 @@ export const createAppAbility = createMongoAbility
 const { build, can, cannot } = new AbilityBuilder<AppAbility>(createAppAbility)
 
 can('invite', 'User')
-cannot('invite', 'User')
+cannot('delete', 'User')
 
 export const ability = build()
