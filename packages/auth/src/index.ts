@@ -1,12 +1,16 @@
-import { AbilityBuilder, createMongoAbility, type MongoAbility } from '@casl/ability'
-import type { User } from './models/user'
-import { permissions } from './permissions'
-import { userSubjectSchema } from './subjects/user'
-import { projectSubjectSchema } from './subjects/project'
-import { z } from 'zod'
-import { organizationSubjectSchema } from './subjects/organization'
-import { inviteSubjectSchema } from './subjects/invite'
-import { billingSubjectSchema } from './subjects/billing'
+import {
+  AbilityBuilder,
+  createMongoAbility,
+  type MongoAbility,
+} from '@casl/ability';
+import type { User } from './models/user';
+import { permissions } from './permissions';
+import { userSubjectSchema } from './subjects/user';
+import { projectSubjectSchema } from './subjects/project';
+import { z } from 'zod';
+import { organizationSubjectSchema } from './subjects/organization';
+import { inviteSubjectSchema } from './subjects/invite';
+import { billingSubjectSchema } from './subjects/billing';
 
 const appAbilities = z.union([
   projectSubjectSchema,
@@ -15,26 +19,25 @@ const appAbilities = z.union([
   inviteSubjectSchema,
   billingSubjectSchema,
 
-  z.tuple([z.literal('manage'), z.literal('all')])
-])
+  z.tuple([z.literal('manage'), z.literal('all')]),
+]);
 
-type AppAbilities = z.infer<typeof appAbilities>
+type AppAbilities = z.infer<typeof appAbilities>;
 
-
-export type AppAbility = MongoAbility<AppAbilities>
-export const createAppAbility = createMongoAbility
+export type AppAbility = MongoAbility<AppAbilities>;
+export const createAppAbility = createMongoAbility;
 
 export function defineAbilitiesFor(user: User) {
-  const builder = new AbilityBuilder<AppAbility>(createAppAbility)
+  const builder = new AbilityBuilder<AppAbility>(createAppAbility);
 
-  if (typeof permissions[user.role] !== "function") {
-    throw new Error(`Permissions for role ${user.role} are not defined`)
+  if (typeof permissions[user.role] !== 'function') {
+    throw new Error(`Permissions for role ${user.role} are not defined`);
   }
 
-  permissions[user.role](user, builder)
+  permissions[user.role](user, builder);
 
   const ability = builder.build({
     detectSubjectType: (object) => object.__typename,
-  })
-  return ability
+  });
+  return ability;
 }
