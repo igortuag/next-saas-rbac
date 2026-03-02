@@ -4,6 +4,7 @@ import { projectSchema } from '../models/project';
 
 export const projectSubjectSchema = z.tuple([
   z.union([
+    z.literal('create'),
     z.literal('manage'),
     z.literal('get'),
     z.literal('update'),

@@ -15,6 +15,10 @@ export const permissions: Record<Role, PermissionsByRole> = {
     cannot(['transfer_ownership', 'update'], 'Organization');
     can(['transfer_ownership', 'update'], 'Organization', { ownerId: user.id });
   },
-  MEMBER(user, { can }) {},
+  MEMBER(user, { can }) {
+    can('get', 'User');
+    can(['create', 'get'], 'Project');
+    can(['update', 'delete'], 'Project', { ownerId: user.id });
+  },
   BILLING(_, { can }) {},
 };
