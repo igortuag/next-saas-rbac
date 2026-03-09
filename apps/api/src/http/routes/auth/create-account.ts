@@ -8,6 +8,7 @@ export function createAccount(app: FastifyInstance) {
     {
       schema: {
         body: z.object({
+          name: z.string(),
           email: z.string(),
           password: z.string().min(6),
         }),
