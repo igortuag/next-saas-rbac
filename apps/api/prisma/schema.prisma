@@ -1,0 +1,44 @@
+export client {
+provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  @@map("users")
+}
+
+model Token {
+  id String @id @default(uuid())
+
+  @@map("tokens")
+}
+
+model Invite {
+  id String @id @default(uuid())
+
+  @@map("invites")
+}
+
+model Member {
+  id String @id @default(uuid())
+
+  @@map("members")
+}
+
+model Organization {
+  id String @id @default(uuid())
+
+  @@map("organizations")
+}
+
+model Project {
+  id String @id @default(uuid())
+
+  @@map("projects")
+}
