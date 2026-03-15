@@ -1,5 +1,5 @@
-export client {
-provider = "prisma-client-js"
+generator client {
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -8,15 +8,38 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id           String   @id @default(uuid())
+  name         String?
+  email        String   @unique
+  passwordHash String?  @map("password_hash")
+  avatarUrl    String?  @map("avatar_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tokens Token[]
 
   @@map("users")
 }
 
+enum TokenType {
+  PASSWORD_RECOVERY
+}
+
 model Token {
-  id String @id @default(uuid())
+  id        String    @id @default(uuid())
+  type      TokenType
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
   @@map("tokens")
+}
+
+model Account {
+  id String @id @default(uuid())
+
+  @@map("accounts")
 }
 
 model Invite {
