@@ -16,7 +16,8 @@ model User {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  tokens Token[]
+  tokens   Token[]
+  accounts Account[]
 
   @@map("users")
 }
@@ -36,9 +37,21 @@ model Token {
   @@map("tokens")
 }
 
-model Account {
-  id String @id @default(uuid())
+enum AccountProvider {
+  GOOGLE
+  GITHUB
+  FACEBOOK
+}
 
+model Account {
+  id                String          @id @default(uuid())
+  provider          AccountProvider
+  providerAccountId String          @map("provider_account_id")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@unique([provider, userId])
   @@map("accounts")
 }
 
