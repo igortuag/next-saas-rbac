@@ -16,7 +16,9 @@ model User {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  tokens Token[]
+  tokens   Token[]
+  accounts Account[]
+  invites  Invite[]
 
   @@map("users")
 }
@@ -36,15 +38,44 @@ model Token {
   @@map("tokens")
 }
 
-model Account {
-  id String @id @default(uuid())
+enum AccountProvider {
+  GOOGLE
+  GITHUB
+  FACEBOOK
+}
 
+model Account {
+  id                String          @id @default(uuid())
+  provider          AccountProvider
+  providerAccountId String          @map("provider_account_id")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@unique([provider, userId])
   @@map("accounts")
 }
 
-model Invite {
-  id String @id @default(uuid())
+enum Role {
+  ADMIN
+  MEMBER
+  BILLING
+}
 
+model Invite {
+  id        String   @id @default(uuid())
+  email     String
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+
+  author User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?       @map("organization_id")
+
+  @@unique([email, organizationId])
+  @@index([email])
   @@map("invites")
 }
 
@@ -55,7 +86,8 @@ model Member {
 }
 
 model Organization {
-  id String @id @default(uuid())
+  id      String   @id @default(uuid())
+  invites Invite[]
 
   @@map("organizations")
 }
