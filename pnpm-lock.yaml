@@ -23,6 +23,9 @@ importers:
       '@saas/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      bcryptjs:
+        specifier: ^3.0.3
+        version: 3.0.3
       fastify:
         specifier: ^5.8.1
         version: 5.8.1
@@ -42,6 +45,9 @@ importers:
       '@saas/tsconfig':
         specifier: workspace:*
         version: link:../../config/typescript-config
+      '@types/bcryptjs':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@types/node':
         specifier: ^25.2.2
         version: 25.2.2
@@ -432,6 +438,10 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
+  '@types/bcryptjs@3.0.0':
+    resolution: {integrity: sha512-WRZOuCuaz8UcZZE4R5HXTco2goQSI2XxjGY3hbM/xDvwmqFWd4ivooImsMx65OKM6CtNKbnZ5YL+YwAwK7c1dg==}
+    deprecated: This is a stub types definition. bcryptjs provides its own type definitions, so you do not need this installed.
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -630,6 +640,10 @@ packages:
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  bcryptjs@3.0.3:
+    resolution: {integrity: sha512-GlF5wPWnSa/X5LKM1o0wz0suXIINz1iHRLvTS+sLyi7XPbe5ycmYI3DlZqVGZZtDgl4DmasFg7gOB3JYbphV5g==}
+    hasBin: true
 
   brace-expansion@1.1.12:
     resolution: {integrity: sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==}
@@ -2395,6 +2409,10 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
+  '@types/bcryptjs@3.0.0':
+    dependencies:
+      bcryptjs: 3.0.3
+
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
@@ -2640,6 +2658,8 @@ snapshots:
   axobject-query@4.1.0: {}
 
   balanced-match@1.0.2: {}
+
+  bcryptjs@3.0.3: {}
 
   brace-expansion@1.1.12:
     dependencies:
