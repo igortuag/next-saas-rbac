@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
+import { hash } from 'bcryptjs';
 
 export function createAccount(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -23,6 +24,24 @@ export function createAccount(app: FastifyInstance) {
           email,
         },
       })
+
+      if (userWithSameEmail) {
+        return reply.status(400).send({
+          message: 'Email already in use',
+        })
+      }
+
+      const passwordHash = await hash(password, 6)
+
+      const user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+        },
+      })
+
+      return reply.status(201).send(user)
     }
   );
 }
