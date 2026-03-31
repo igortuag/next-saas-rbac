@@ -50,6 +50,20 @@ async function seed() {
             avatarUrl: faker.image.avatarGitHub(),
             ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
           },
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
         ],
       },
     },
@@ -64,7 +78,7 @@ async function seed() {
     },
   });
 
-    await prisma.organization.create({
+  await prisma.organization.create({
     name: 'Acme Inc (Member)',
     slug: 'acme-member',
     avatarUrl: faker.image.avatarGitHub(),
@@ -80,6 +94,20 @@ async function seed() {
             avatarUrl: faker.image.avatarGitHub(),
             ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
           },
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
         ],
       },
     },
@@ -87,6 +115,50 @@ async function seed() {
       createMany: {
         data: [
           { userId: user.id, role: 'MEMBER' },
+          { userId: user2.id, role: 'ADMIN' },
+          { userId: user3.id, role: 'MEMBER' },
+        ],
+      },
+    },
+  });
+
+  await prisma.organization.create({
+    name: 'Acme Inc (Billing)',
+    slug: 'acme-billing',
+    avatarUrl: faker.image.avatarGitHub(),
+    shouldAttachUserByDomain: true,
+    owner: user.id,
+    projects: {
+      createMany: {
+        data: [
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
+          {
+            name: faker.lorem.words(5),
+            slug: faker.lorem.slug(5),
+            description: faker.lorem.paragraph(),
+            avatarUrl: faker.image.avatarGitHub(),
+            ownerId: faker.helpers.arrayElement([user.id, user2.id, user3.id]),
+          },
+        ],
+      },
+    },
+    member: {
+      createMany: {
+        data: [
+          { userId: user.id, role: 'BILLING' },
           { userId: user2.id, role: 'ADMIN' },
           { userId: user3.id, role: 'MEMBER' },
         ],
