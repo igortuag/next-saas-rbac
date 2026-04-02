@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
+    "@fastify/swagger": "^9.7.0",
     "@prisma/client": "^7.5.0",
     "@saas/auth": "workspace:*",
     "bcryptjs": "^3.0.3",
