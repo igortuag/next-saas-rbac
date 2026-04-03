@@ -1,5 +1,6 @@
 import fastifyCors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUI from '@fastify/swagger-ui';
 import { fastify } from 'fastify';
 import {
   jsonSchemaTransform,
@@ -25,6 +26,10 @@ app.register(fastifySwagger, {
     servers: [],
   },
   transform: jsonSchemaTransform,
+});
+
+app.register(fastifySwaggerUI, {
+  routePrefix: '/docs',
 });
 
 app.register(fastifyCors);
