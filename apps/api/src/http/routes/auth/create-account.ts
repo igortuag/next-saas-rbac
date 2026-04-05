@@ -3,6 +3,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { hash } from 'bcryptjs';
+import { create } from 'node:domain';
 
 export function createAccount(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -33,6 +34,15 @@ export function createAccount(app: FastifyInstance) {
         });
       }
 
+      const [, domain] = email.split('@');
+
+      const autoJoinOrganization = await prisma.organization.findFirst({
+        where: {
+          autoJoinDomain: domain,
+          shouldAttachUsersByDomain: true,
+        },
+      });
+
       const passwordHash = await hash(password, 6);
 
       const user = await prisma.user.create({
@@ -40,6 +50,13 @@ export function createAccount(app: FastifyInstance) {
           name,
           email,
           passwordHash,
+          member_on: autoJoinOrganization
+            ? {
+                create: {
+                  organizationId: autoJoinOrganization.id,
+                },
+              }
+            : undefined,
         },
       });
 
