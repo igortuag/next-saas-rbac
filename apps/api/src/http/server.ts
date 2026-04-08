@@ -1,4 +1,5 @@
 import fastifyCors from '@fastify/cors';
+import fastifyJwt from '@fastify/jwt';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUI from '@fastify/swagger-ui';
 import { fastify } from 'fastify';
@@ -34,6 +35,10 @@ app.register(fastifySwaggerUI, {
 });
 
 app.register(fastifyCors);
+
+app.register(fastifyJwt, {
+  secret: 'supersecretkey',
+});
 
 app.register(createAccount);
 app.register(authenticateWithPassword);
