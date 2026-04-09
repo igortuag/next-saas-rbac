@@ -50,7 +50,18 @@ export async function authenticateWithPassword(app: FastifyInstance) {
         });
       }
 
-      return 'Logged in successfully';
+      const token = await reply.jwtSign(
+        {},
+        {
+          sign: {
+            expiresIn: '7d',
+          },
+        }
+      );
+
+      return reply.status(201).send({
+        token,
+      });
     }
   );
 }
