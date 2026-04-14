@@ -19,6 +19,9 @@ export async function getProfile(app: FastifyInstance) {
               avatarUrl: z.string().nullable(),
             }),
           }),
+          401: z.object({
+            error: z.string(),
+          }),
         },
       },
     },
@@ -36,6 +39,10 @@ export async function getProfile(app: FastifyInstance) {
           id: payload.sub,
         },
       });
+
+      if (!user) {
+        return reply.status(404).send({ error: 'User not found' });
+      }
 
       return reply.send({ user });
     }
