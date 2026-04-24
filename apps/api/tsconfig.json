@@ -1,9 +1,11 @@
 {
   "extends": "@saas/tsconfig/node.json",
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "@types/*.d.ts"
   ],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
