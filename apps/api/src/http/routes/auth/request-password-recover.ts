@@ -15,9 +15,7 @@ export async function requestPasswordRecover(app: FastifyInstance) {
           email: z.string().email(),
         }),
         response: {
-          201: z.object({
-            message: z.string(),
-          }),
+          201: z.null(),
         },
       },
     },
@@ -33,7 +31,7 @@ export async function requestPasswordRecover(app: FastifyInstance) {
       if (!userFromEmail) {
         return reply
           .status(201)
-          .send({ message: 'Password recovery email sent' });
+          .send(null);
       }
 
       const { id: code } = await prisma.passwordRecoveryToken.create({
@@ -49,7 +47,7 @@ export async function requestPasswordRecover(app: FastifyInstance) {
 
       return reply
         .status(201)
-        .send({ message: 'Password recovery email sent' });
+        .send(null);
     }
   );
 }
