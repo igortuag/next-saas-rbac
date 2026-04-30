@@ -15,6 +15,7 @@ import { authenticateWithPassword } from './routes/auth/authenticate-with-passwo
 import { getProfile } from './routes/auth/get-profile';
 import { errorHandler } from './error-handler';
 import { requestPasswordRecover } from './routes/auth/request-password-recover';
+import { resetPassword } from './routes/auth/reset-password';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -49,6 +50,7 @@ app.register(createAccount);
 app.register(authenticateWithPassword);
 app.register(getProfile);
 app.register(requestPasswordRecover);
+app.register(resetPassword);
 
 app.listen({ port: 3333 }).then(() => {
   console.log('Server is running on port 3333');
