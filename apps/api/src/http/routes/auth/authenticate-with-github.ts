@@ -47,9 +47,23 @@ export async function authenticateWithPassword(app: FastifyInstance) {
         },
       });
 
-      const data = await response.json();
+      const githubAccessTokenData = await response.json();
 
-      console.log(data);
+      const { access_token } = z
+        .object({
+          access_token: z.string(),
+          token_type: z.literal('bearer'),
+          scope: z.string(),
+        })
+        .parse(githubAccessTokenData);
+
+      const githubUserResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      console.log(githubUserResponse);
     }
   );
 }
