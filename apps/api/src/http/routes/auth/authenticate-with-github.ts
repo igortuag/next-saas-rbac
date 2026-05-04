@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/prisma';
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
@@ -63,7 +64,46 @@ export async function authenticateWithPassword(app: FastifyInstance) {
         },
       });
 
-      console.log(githubUserResponse);
+      const githubUserData = await githubUserResponse.json();
+
+      const { id, name, email, avatar_url } = z
+        .object({
+          id: z.number(),
+          avatar_url: z.string(),
+          name: z.string().nullable(),
+          email: z.string().nullable(),
+        })
+        .parse(githubUserData);
+
+      if (!email) {
+        throw new Error('GitHub user does not have an email');
+      }
+
+      let user = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (!user) {
+        user = await prisma.user.create({
+          data: {
+            email,
+            name,
+            avatarUrl: avatar_url,
+            githubId: id,
+          },
+        });
+      }
+
+      let account = await prisma.account.findUnique({
+        where: {
+          provider_providerAccountId: {
+            provider: 'github',
+            providerAccountId: id.toString(),
+          },
+        },
+      });
     }
   );
 }
