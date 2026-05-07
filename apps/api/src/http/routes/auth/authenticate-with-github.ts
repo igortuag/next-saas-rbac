@@ -66,9 +66,14 @@ export async function authenticateWithPassword(app: FastifyInstance) {
 
       const githubUserData = await githubUserResponse.json();
 
-      const { id, name, email, avatar_url } = z
+      const {
+        id: githubId,
+        name,
+        email,
+        avatar_url,
+      } = z
         .object({
-          id: z.number(),
+          id: z.number().transform(String),
           avatar_url: z.string(),
           name: z.string().nullable(),
           email: z.string().nullable(),
@@ -91,7 +96,7 @@ export async function authenticateWithPassword(app: FastifyInstance) {
             email,
             name,
             avatarUrl: avatar_url,
-            githubId: id,
+            githubId,
           },
         });
       }
@@ -99,10 +104,35 @@ export async function authenticateWithPassword(app: FastifyInstance) {
       let account = await prisma.account.findUnique({
         where: {
           provider_providerAccountId: {
-            provider: 'github',
-            providerAccountId: id.toString(),
+            provider: 'GITHUB',
+            providerAccountId: githubId,
           },
         },
+      });
+
+      if (!account) {
+        account = await prisma.account.create({
+          data: {
+            provider: 'GITHUB',
+            providerAccountId: githubId,
+            userId: user.id,
+          },
+        });
+      }
+
+     const token = await reply.jwtSign(
+        {
+          sub: user.id,
+        },
+        {
+          sign: {
+            expiresIn: '7d',
+          },
+        }
+      );
+
+      return reply.status(201).send({
+        token,
       });
     }
   );
