@@ -119,6 +119,21 @@ export async function authenticateWithPassword(app: FastifyInstance) {
           },
         });
       }
+
+     const token = await reply.jwtSign(
+        {
+          sub: user.id,
+        },
+        {
+          sign: {
+            expiresIn: '7d',
+          },
+        }
+      );
+
+      return reply.status(201).send({
+        token,
+      });
     }
   );
 }
