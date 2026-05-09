@@ -133,6 +133,9 @@ importers:
       '@saas/tsconfig':
         specifier: workspace:*
         version: link:../../config/typescript-config
+      '@types/node':
+        specifier: ^25.2.2
+        version: 25.2.2
 
 packages:
 
