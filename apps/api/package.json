@@ -2,7 +2,12 @@
   "name": "@saas/api",
   "version": "0.0.0",
   "scripts": {
-    "dev": "tsx watch src/http/server.ts"
+    "dev": "pnpm env:load tsx watch src/http/server.ts",
+    "env:load": "dotenv -e ../../.env --",
+    "db:migrate": "pnpm env:load prisma migrate dev",
+    "db:generate": "pnpm env:load prisma generate",
+    "db:seed": "pnpm env:load prisma db seed",
+    "db:studio": "pnpm env:load prisma studio"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
@@ -25,6 +30,7 @@
     "@saas/tsconfig": "workspace:*",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^25.2.2",
+    "dotenv-cli": "^11.0.0",
     "prisma": "^7.4.2",
     "tsx": "^4.21.0"
   },
