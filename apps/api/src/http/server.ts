@@ -16,6 +16,7 @@ import { getProfile } from './routes/auth/get-profile';
 import { errorHandler } from './error-handler';
 import { requestPasswordRecover } from './routes/auth/request-password-recover';
 import { resetPassword } from './routes/auth/reset-password';
+import { env } from '@saas/env';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -25,13 +26,20 @@ app.setValidatorCompiler(validatorCompiler);
 app.setErrorHandler(errorHandler);
 
 app.register(fastifySwagger, {
-  openapi: {
+  swagger: {
     info: {
       title: 'Next.js Saas',
       description: 'Full-stack SaaS app with  multi-tenant & RBAC.',
       version: '1.0.0',
     },
-    servers: [],
+    securityDefinitions: {
+      Authorization: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+        description: 'JWT token for authentication. Format: Bearer {token}',
+      },
+    },
   },
   transform: jsonSchemaTransform,
 });
@@ -43,7 +51,7 @@ app.register(fastifySwaggerUI, {
 app.register(fastifyCors);
 
 app.register(fastifyJwt, {
-  secret: 'supersecretkey',
+  secret: env.JWT_SECRET,
 });
 
 app.register(createAccount);
@@ -52,6 +60,6 @@ app.register(getProfile);
 app.register(requestPasswordRecover);
 app.register(resetPassword);
 
-app.listen({ port: 3333 }).then(() => {
-  console.log('Server is running on port 3333');
+app.listen({ port: env.SERVER_PORT }).then(() => {
+  console.log(`Server is running on port ${env.SERVER_PORT}`);
 });

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { env } from '@saas/env';
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import z from 'zod';
@@ -27,17 +28,14 @@ export async function authenticateWithPassword(app: FastifyInstance) {
         'https://github.com/login/oauth/access_token'
       );
 
-      if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+      if (!env.GITHUB_OAUTH_CLIENT_ID || !env.GITHUB_OAUTH_CLIENT_SECRET) {
         throw new Error('GitHub client ID or secret is not set');
       }
 
-      githubOAuthURL.searchParams.set(
-        'client_id',
-        process.env.GITHUB_CLIENT_ID
-      );
+      githubOAuthURL.searchParams.set('client_id', env.GITHUB_OAUTH_CLIENT_ID);
       githubOAuthURL.searchParams.set(
         'client_secret',
-        process.env.GITHUB_CLIENT_SECRET
+        env.GITHUB_OAUTH_CLIENT_SECRET
       );
       githubOAuthURL.searchParams.set('code', code);
 
@@ -120,7 +118,7 @@ export async function authenticateWithPassword(app: FastifyInstance) {
         });
       }
 
-     const token = await reply.jwtSign(
+      const token = await reply.jwtSign(
         {
           sub: user.id,
         },
