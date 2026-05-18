@@ -26,18 +26,20 @@ app.setValidatorCompiler(validatorCompiler);
 app.setErrorHandler(errorHandler);
 
 app.register(fastifySwagger, {
-  swagger: {
+  openapi: {
     info: {
       title: 'Next.js Saas',
       description: 'Full-stack SaaS app with  multi-tenant & RBAC.',
       version: '1.0.0',
     },
-    securityDefinitions: {
-      Authorization: {
-        type: 'apiKey',
-        name: 'Authorization',
-        in: 'header',
-        description: 'JWT token for authentication. Format: Bearer {token}',
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'JWT token for authentication. Format: Bearer {token}',
+        },
       },
     },
   },
