@@ -26,12 +26,16 @@ export async function getOrganization(app: FastifyInstance) {
                 domain: z.string().nullable(),
                 slug: z.string(),
                 shouldAttachUserByDomain: z.boolean().nullable(),
+                avatarUrl: z.string().nullable(),
+                createdAt: z.string(),
+                updatedAt: z.string(),
+                ownerId: z.string(),
               }),
             }),
           },
         },
       },
-      async (request, reply) => {
+      async (request) => {
         const { slug } = request.params;
 
         const { organization } = await request.getUserMembership(slug);
