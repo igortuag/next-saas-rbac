@@ -5,7 +5,7 @@ import { auth } from '@/http/middlewares/auth';
 import { prisma } from '@/lib/prisma';
 import { roleSchema } from '@saas/auth';
 
-export async function getOrganization(app: FastifyInstance) {
+export async function getOrganizations(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
