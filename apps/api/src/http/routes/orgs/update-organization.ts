@@ -1,11 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
+import { userSchema, organizationSchema, defineAbilitiesFor } from '@saas/auth';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/http/middlewares/auth';
 import { domain } from 'node_modules/zod/v4/core/regexes.cjs';
 import { BadRequestError } from '../_errors/bad-request-error';
 import { generateSlug } from '@/lib/create-slug';
+import { UnauthorizedError } from '../_errors/unauthorized-error copy';
 
 export async function updateOrganization(app: FastifyInstance) {
   app
@@ -46,8 +48,16 @@ export async function updateOrganization(app: FastifyInstance) {
 
         const { name, domain, shouldAttachUserByDomain } = request.body;
 
-        if (!membership || membership.role !== 'ADMIN') {
-          throw new BadRequestError(
+        const authUser = userSchema.parse({
+          id: userId,
+          role: membership.role,
+        });
+
+        const authOrganization = organizationSchema.parse(organization);
+        const { cannot } = defineAbilitiesFor(authUser);
+
+        if (cannot('update', authOrganization)) {
+          throw new UnauthorizedError(
             'You do not have permission to update this organization'
           );
         }
