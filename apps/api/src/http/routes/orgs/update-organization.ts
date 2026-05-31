@@ -33,9 +33,7 @@ export async function updateOrganization(app: FastifyInstance) {
             slug: z.string().min(1).max(255),
           }),
           response: {
-            201: z.object({
-              organizationId: z.string(),
-            }),
+            204: z.null(),
           },
         },
       },
@@ -63,8 +61,13 @@ export async function updateOrganization(app: FastifyInstance) {
         }
 
         if (domain) {
-          const organizationByDomain = await prisma.organization.findUnique({
-            where: { domain },
+          const organizationByDomain = await prisma.organization.findFirst({
+            where: {
+              domain,
+              id: {
+                not: organization.id,
+              },
+            },
           });
 
           if (organizationByDomain) {
@@ -75,25 +78,17 @@ export async function updateOrganization(app: FastifyInstance) {
         }
 
         const updatedOrganization = await prisma.organization.update({
-          where: { slug },
+          where: {
+            id: organization.id,
+          },
           data: {
             name,
             domain,
-            slug: generateSlug(name),
             shouldAttachUserByDomain,
-            ownerId: userId,
-            members: {
-              create: {
-                userId,
-                role: 'ADMIN',
-              },
-            },
           },
         });
 
-        reply.status(201).send({
-          organizationId: updatedOrganization.id,
-        });
+        reply.status(204)
       }
     );
 }
