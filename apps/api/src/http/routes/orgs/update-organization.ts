@@ -8,6 +8,7 @@ import { domain } from 'node_modules/zod/v4/core/regexes.cjs';
 import { BadRequestError } from '../_errors/bad-request-error';
 import { generateSlug } from '@/lib/create-slug';
 import { UnauthorizedError } from '../_errors/unauthorized-error copy';
+import { getUserPermissions } from '@/utils/get-user-permissions';
 
 export async function updateOrganization(app: FastifyInstance) {
   app
@@ -46,13 +47,9 @@ export async function updateOrganization(app: FastifyInstance) {
 
         const { name, domain, shouldAttachUserByDomain } = request.body;
 
-        const authUser = userSchema.parse({
-          id: userId,
-          role: membership.role,
-        });
-
         const authOrganization = organizationSchema.parse(organization);
-        const { cannot } = defineAbilitiesFor(authUser);
+
+        const { cannot } = getUserPermissions(userId, membership.role);
 
         if (cannot('update', authOrganization)) {
           throw new UnauthorizedError(
@@ -88,7 +85,7 @@ export async function updateOrganization(app: FastifyInstance) {
           },
         });
 
-        reply.status(204)
+        reply.status(204);
       }
     );
 }
