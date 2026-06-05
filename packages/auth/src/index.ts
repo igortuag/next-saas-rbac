@@ -17,7 +17,6 @@ export * from './models/organization';
 export * from './models/project';
 export * from './roles';
 
-
 const appAbilities = z.union([
   projectSubjectSchema,
   userSubjectSchema,
@@ -45,5 +44,9 @@ export function defineAbilitiesFor(user: User) {
   const ability = builder.build({
     detectSubjectType: (object) => object.__typename,
   });
+
+  ability.can = ability.can.bind(ability);
+  ability.cannot = ability.cannot.bind(ability);
+
   return ability;
 }
