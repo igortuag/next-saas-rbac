@@ -74,7 +74,7 @@ export async function updateOrganization(app: FastifyInstance) {
           }
         }
 
-        const updatedOrganization = await prisma.organization.update({
+        await prisma.organization.update({
           where: {
             id: organization.id,
           },
