@@ -51,6 +51,33 @@ export async function transferOrganization(app: FastifyInstance) {
           );
         }
 
+        const transferToMembership = await prisma.membership.findUnique({
+          where: {
+            organizationId_userId: {
+              organizationId: organization.id,
+              userId: transferToUserId,
+            },
+          },
+        });
+
+        if (!transferToMembership) {
+          throw new BadRequestError(
+            'The user you are trying to transfer ownership to is not a member of this organization'
+          );
+        }
+
+        await prisma.membership.update({
+          where: {
+            organizationId_userId: {
+              organizationId: organization.id,
+              userId: transferToUserId,
+            },
+          },
+          data: {
+            role: 'ADMIN',
+          },
+        });
+
         await prisma.organization.update({
           where: {
             id: organization.id,
