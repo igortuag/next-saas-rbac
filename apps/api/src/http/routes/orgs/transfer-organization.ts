@@ -66,26 +66,28 @@ export async function transferOrganization(app: FastifyInstance) {
           );
         }
 
-        await prisma.membership.update({
-          where: {
-            organizationId_userId: {
-              organizationId: organization.id,
-              userId: transferToUserId,
+        await prisma.$transaction([
+          prisma.membership.update({
+            where: {
+              organizationId_userId: {
+                organizationId: organization.id,
+                userId: transferToUserId,
+              },
             },
-          },
-          data: {
-            role: 'ADMIN',
-          },
-        });
+            data: {
+              role: 'ADMIN',
+            },
+          }),
 
-        await prisma.organization.update({
-          where: {
-            id: organization.id,
-          },
-          data: {
-            ownerId: transferToUserId,
-          },
-        });
+          prisma.organization.update({
+            where: {
+              id: organization.id,
+            },
+            data: {
+              ownerId: transferToUserId,
+            },
+          }),
+        ]);
 
         reply.status(204);
       }
