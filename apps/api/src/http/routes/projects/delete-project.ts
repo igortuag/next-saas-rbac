@@ -5,7 +5,8 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/http/middlewares/auth';
 import { getUserPermissions } from '@/utils/get-user-permissions';
 import { UnauthorizedError } from '../_errors/unauthorized-error copy';
-import { createSlug } from '@/utils/create-slug';
+import { projectSchema } from '@saas/auth';
+import { BadRequestError } from '../_errors/bad-request-error';
 
 export async function deleteProject(app: FastifyInstance) {
   app
@@ -20,29 +21,42 @@ export async function deleteProject(app: FastifyInstance) {
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string().min(1).max(255),
+            projectId: z.string().min(1).max(255),
           }),
           response: {
-            204: z.object(z.null()),
+            204: z.null(),
           },
         },
       },
       async (request, reply) => {
-        const { slug } = request.params;
+        const { slug, projectId } = request.params;
         const userId = await request.getCurrentUserId();
         const { organization, membership } =
           await request.getUserMembership(slug);
 
-        const { cannot } = getUserPermissions(userId, membership?.role);
+        const project = await prisma.project.findUnique({
+          where: {
+            id: projectId,
+            organizationId: organization.id,
+          },
+        });
 
-        if (cannot('delete', 'Project')) {
+        if (!project) {
+          throw new BadRequestError('Project not found');
+        }
+
+        const { cannot } = getUserPermissions(userId, membership?.role);
+        const authProject = projectSchema.parse(project);
+
+        if (cannot('delete', authProject)) {
           throw new UnauthorizedError(
             'You do not have permission to delete a project in this organization'
           );
         }
 
-        const project = await prisma.project.delete({
+        await prisma.project.delete({
           where: {
-            id: request.params.projectId,
+            id: projectId,
             organizationId: organization.id,
           },
         });
