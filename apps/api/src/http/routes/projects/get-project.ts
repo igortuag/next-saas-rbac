@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/http/middlewares/auth';
 import { getUserPermissions } from '@/utils/get-user-permissions';
 import { UnauthorizedError } from '../_errors/unauthorized-error copy';
-import { createSlug } from '@/utils/create-slug';
+import { BadRequestError } from '../_errors/bad-request-error';
 
 export async function getProject(app: FastifyInstance) {
   app
@@ -80,6 +80,10 @@ export async function getProject(app: FastifyInstance) {
             },
           },
         });
+
+        if (!project) {
+          throw new BadRequestError('Project not found');
+        }
 
         return reply.status(200).send({
           project,
