@@ -6,6 +6,7 @@ import { auth } from '@/http/middlewares/auth';
 import { getUserPermissions } from '@/utils/get-user-permissions';
 import { UnauthorizedError } from '../_errors/unauthorized-error copy';
 import { roleSchema } from '@saas/auth';
+import { BadRequestError } from '../_errors/bad-request-error';
 
 export async function createInvite(app: FastifyInstance) {
   app
@@ -37,13 +38,25 @@ export async function createInvite(app: FastifyInstance) {
         const userId = await request.getCurrentUserId();
         const { organization, membership } =
           await request.getUserMembership(slug);
-        const { email, role } = request.body;
 
         const { cannot } = getUserPermissions(userId, membership?.role);
 
         if (cannot('create', 'Invite')) {
           throw new UnauthorizedError(
             'You do not have permission to create an invite in this organization'
+          );
+        }
+
+        const { email, role } = request.body;
+
+        const [, domain] = email.split('@');
+
+        if (
+          organization.shouldAttachUsersByDomain &&
+          domain === organization.domain
+        ) {
+          throw new BadRequestError(
+            `Users with the domain ${domain} can be added directly to the organization, no invite is needed.`
           );
         }
       }
