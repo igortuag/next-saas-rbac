@@ -59,6 +59,21 @@ export async function createInvite(app: FastifyInstance) {
             `Users with the domain ${domain} can be added directly to the organization, no invite is needed.`
           );
         }
+
+        const inviteWithSameEmail = await prisma.invite.findUnique({
+          where: {
+            email_organizationId: {
+              email,
+              organizationId: organization.id,
+            },
+          },
+        });
+
+        if (inviteWithSameEmail) {
+          throw new BadRequestError(
+            `An invite for the email ${email} already exists in this organization.`
+          );
+        }
       }
     );
 }
