@@ -62,9 +62,9 @@ export async function createInvite(app: FastifyInstance) {
 
         const inviteWithSameEmail = await prisma.invite.findUnique({
           where: {
-            email_organizationId: {
+            organizationId: organization.id,
+            user: {
               email,
-              organizationId: organization.id,
             },
           },
         });
@@ -72,6 +72,21 @@ export async function createInvite(app: FastifyInstance) {
         if (inviteWithSameEmail) {
           throw new BadRequestError(
             `An invite for the email ${email} already exists in this organization.`
+          );
+        }
+
+        const memberWithSameEmail = await prisma.membership.findUnique({
+          where: {
+            organizationId: organization.id,
+            user: {
+              email,
+            },
+          },
+        });
+
+        if (memberWithSameEmail) {
+          throw new BadRequestError(
+            `A member with the email ${email} already exists in this organization.`
           );
         }
       }
