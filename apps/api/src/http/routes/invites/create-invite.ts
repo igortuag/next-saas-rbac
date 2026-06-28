@@ -89,6 +89,15 @@ export async function createInvite(app: FastifyInstance) {
             `A member with the email ${email} already exists in this organization.`
           );
         }
+
+        await prisma.invite.create({
+          data: {
+            organizationId: organization.id,
+            email,
+            role,
+            authorId: userId,
+          }
+        })
       }
     );
 }
