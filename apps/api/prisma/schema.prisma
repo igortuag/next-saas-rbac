@@ -71,7 +71,7 @@ model Invite {
   createdAt DateTime @default(now()) @map("created_at")
 
   author User?   @relation(fields: [ownerId], references: [id])
-  ownerId String? @map("owner_id")
+  authorId String? @map("author_id")
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?       @map("organization_id")
