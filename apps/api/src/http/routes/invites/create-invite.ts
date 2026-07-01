@@ -90,14 +90,18 @@ export async function createInvite(app: FastifyInstance) {
           );
         }
 
-        await prisma.invite.create({
+        const invite = await prisma.invite.create({
           data: {
             organizationId: organization.id,
             email,
             role,
             authorId: userId,
-          }
-        })
+          },
+        });
+
+        return reply.status(201).send({
+          inviteId: invite.id,
+        });
       }
     );
 }
