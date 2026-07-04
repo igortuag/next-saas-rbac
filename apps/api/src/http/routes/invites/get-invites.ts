@@ -34,9 +34,6 @@ export async function getInvites(app: FastifyInstance) {
                   email: z.email(),
                   avatarUrl: z.url().nullable(),
                 }),
-                organization: z.object({
-                  name: z.string(),
-                }),
               })
             ),
           },
@@ -45,8 +42,7 @@ export async function getInvites(app: FastifyInstance) {
       async (request, reply) => {
         const { slug } = request.params;
         const userId = await request.getCurrentUserId();
-        const { organization, membership } =
-          await request.getUserMembership(slug);
+        const { membership } = await request.getUserMembership(slug);
 
         const { cannot } = getUserPermissions(userId, membership?.role);
 
@@ -68,11 +64,6 @@ export async function getInvites(app: FastifyInstance) {
                 id: true,
                 email: true,
                 avatarUrl: true,
-              },
-            },
-            organization: {
-              select: {
-                name: true,
               },
             },
           },
