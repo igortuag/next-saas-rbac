@@ -3,7 +3,6 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/http/middlewares/auth';
-import { roleSchema } from '@saas/auth';
 import { BadRequestError } from '../_errors/bad-request-error';
 
 export async function acceptInvite(app: FastifyInstance) {
@@ -44,6 +43,24 @@ export async function acceptInvite(app: FastifyInstance) {
         if (!user) {
           throw new BadRequestError('User not found');
         }
+
+        if (invite.email !== user.email) {
+          throw new BadRequestError('Invite email does not match user email');
+        }
+
+        await prisma.$transaction([
+          prisma.member.create({
+            data: {
+              userId: user.id,
+              organizationId: invite.organizationId,
+              role: invite.role,
+            },
+          }),
+
+          prisma.invite.delete({
+            where: { id: inviteId },
+          }),
+        ]);
 
         return reply.status(204).send(null);
       }
