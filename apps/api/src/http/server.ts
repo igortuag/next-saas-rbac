@@ -34,6 +34,7 @@ import { removeMember } from './routes/members/remove-member';
 import { createInvite } from './routes/invites/create-invite';
 import { getInvite } from './routes/invites/get-invite';
 import { getInvites } from './routes/invites/get-invites';
+import { revokeInvite } from './routes/invites/revoke-invite';
 import { acceptInvite } from './routes/invites/accept-invite';
 import { rejectInvite } from './routes/invites/reject-invite';
 
@@ -102,6 +103,7 @@ app.register(getInvite);
 app.register(getInvites);
 app.register(acceptInvite);
 app.register(rejectInvite);
+app.register(revokeInvite);
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server is running on port ${env.SERVER_PORT}`);
