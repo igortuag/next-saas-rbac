@@ -1,5 +1,7 @@
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 
 export default function SignInPage() {
@@ -19,6 +21,16 @@ export default function SignInPage() {
           Forgot password?
         </Link>
       </div>
+
+      <Button type="submit" className="w-full">
+        Sign In with email
+      </Button>
+
+      <Separator />
+
+      <Button type="button" variant="outline" className="w-full">
+        Sign In with Github
+      </Button>
     </form>
   );
 }
