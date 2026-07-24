@@ -4,6 +4,9 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 
+import githubIcon from '@/assets/icons/github.svg';
+import Image from 'next/image';
+
 export default function SignInPage() {
   return (
     <form className="space-y-4">
@@ -29,6 +32,7 @@ export default function SignInPage() {
       <Separator />
 
       <Button type="button" variant="outline" className="w-full">
+        <Image src={githubIcon} alt="Github" className="mr-2 size-4 dark:invert" />
         Sign In with Github
       </Button>
     </form>
