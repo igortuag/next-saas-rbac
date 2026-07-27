@@ -3,13 +3,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
-
+import { signInWithEmailAndPassword } from './actions';
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
 
 export default function SignInPage() {
   return (
-    <form className="space-y-4">
+    <form action={signInWithEmailAndPassword} className="space-y-4">
       <div className="space-y-1">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" type="email" placeholder="E-mail" />
