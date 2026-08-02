@@ -16,5 +16,5 @@ export async function signInWithEmailAndPassword(data: FormData) {
     },
   });
 
-  console.log('result', result);
+  return result.json();
 }
