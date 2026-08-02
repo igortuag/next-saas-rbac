@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 export default function SignInPage() {
   return (
-    <form action={signInWithEmailAndPassword} className="space-y-4">
+    <form action={signInWithEmailAndPassword as any} className="space-y-4">
       <div className="space-y-1">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" type="email" placeholder="E-mail" />
