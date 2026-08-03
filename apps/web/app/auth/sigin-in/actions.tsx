@@ -1,20 +1,18 @@
 'use server';
 
-import ky from 'ky';
-
-const api = ky.create({
-  prefix: process.env.NEXT_PUBLIC_API_URL,
-});
+import { api } from '@/http/api-client';
 
 export async function signInWithEmailAndPassword(data: FormData) {
   const { email, password } = Object.fromEntries(data);
 
-  const result = await api.post('sessions/password', {
-    json: {
-      email,
-      password,
-    },
-  });
+  const result = await api
+    .post('sessions/password', {
+      json: {
+        email,
+        password,
+      },
+    })
+    .json();
 
-  return result.json();
+  return result;
 }
