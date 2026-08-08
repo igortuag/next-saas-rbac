@@ -8,10 +8,13 @@ import Link from 'next/link';
 import { signInWithEmailAndPassword } from './actions';
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
+import { useActionState } from 'react';
 
 export function SignInForm() {
+  const [state, formAction] = useActionState(signInWithEmailAndPassword, null);
+
   return (
-    <form action={signInWithEmailAndPassword as any} className="space-y-4">
+    <form action={formAction} className="space-y-4">
       <div className="space-y-1">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" type="email" placeholder="E-mail" />
