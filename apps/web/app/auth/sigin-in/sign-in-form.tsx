@@ -9,9 +9,13 @@ import { signInWithEmailAndPassword } from './actions';
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
 import { useActionState } from 'react';
+import { Loader2 } from 'lucide-react';
 
 export function SignInForm() {
-  const [state, formAction] = useActionState(signInWithEmailAndPassword, null);
+  const [state, formAction, isPending] = useActionState(
+    signInWithEmailAndPassword,
+    null
+  );
 
   return (
     <form action={formAction} className="space-y-4">
@@ -31,7 +35,11 @@ export function SignInForm() {
       </div>
 
       <Button type="submit" className="w-full">
-        Sign In with email
+        {isPending ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          'Sign In with email'
+        )}
       </Button>
 
       <Separator />
