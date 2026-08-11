@@ -1,17 +1,38 @@
 'use server';
 
+import { z } from 'zod';
+
 import { signInWithPassword } from '@/http/sign-in-with-password';
 
-export async function signInWithEmailAndPassword(
-  previousState: any,
-  data: FormData
-) {
-  const { email, password } = Object.fromEntries(data);
+const signInSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8),
+});
 
-  const result = await signInWithPassword({
+export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
+  const result = signInSchema.safeParse(Object.fromEntries(data));
+
+  if (!result.success) {
+    const errors = result.error.flatten().fieldErrors;
+
+    return {
+      success: false,
+      message: null,
+      errors,
+    };
+  }
+
+  const { email, password } = result.data;
+
+  const { token } = await signInWithPassword({
     email: String(email),
     password: String(password),
   });
 
-  return result;
+  return {
+    success: true,
+    message: null,
+    token,
+    errors: null,
+  };
 }
