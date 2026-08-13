@@ -35,6 +35,9 @@ export function SignInForm() {
       <div className="space-y-1">
         <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" placeholder="Password" />
+        {state.errors?.password && (
+          <p className="text-xs text-destructive">{state.errors.password[0]}</p>
+        )}
         <Link
           href="/auth/forgot-password"
           className="text-xs font-medium text-foreground hover:underline"
