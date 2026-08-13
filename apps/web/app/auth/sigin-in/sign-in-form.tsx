@@ -14,7 +14,12 @@ import { Loader2 } from 'lucide-react';
 export function SignInForm() {
   const [state, formAction, isPending] = useActionState(
     signInWithEmailAndPassword,
-    null
+    {
+      success: false,
+      message: null,
+      errors: null,
+      token: undefined,
+    }
   );
 
   return (
@@ -22,10 +27,17 @@ export function SignInForm() {
       <div className="space-y-1">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" type="email" placeholder="E-mail" />
+
+        {state.errors?.email && (
+          <p className="text-xs text-destructive">{state.errors.email[0]}</p>
+        )}
       </div>
       <div className="space-y-1">
         <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" placeholder="Password" />
+        {state.errors?.password && (
+          <p className="text-xs text-destructive">{state.errors.password[0]}</p>
+        )}
         <Link
           href="/auth/forgot-password"
           className="text-xs font-medium text-foreground hover:underline"

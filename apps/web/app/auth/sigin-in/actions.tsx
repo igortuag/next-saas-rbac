@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { signInWithPassword } from '@/http/sign-in-with-password';
 
 const signInSchema = z.object({
-  email: z.email(),
-  password: z.string().min(8),
+  email: z.email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
 });
 
 export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
