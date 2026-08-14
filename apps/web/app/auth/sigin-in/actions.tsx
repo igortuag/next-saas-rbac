@@ -3,6 +3,7 @@
 import { z } from 'zod';
 
 import { signInWithPassword } from '@/http/sign-in-with-password';
+import { HTTPError } from 'ky';
 
 const signInSchema = z.object({
   email: z.email('Invalid email address'),
@@ -24,15 +25,31 @@ export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
 
   const { email, password } = result.data;
 
-  const { token } = await signInWithPassword({
-    email: String(email),
-    password: String(password),
-  });
+  try {
+    const { token } = await signInWithPassword({
+      email: email,
+      password: password,
+    });
 
-  return {
-    success: true,
-    message: null,
-    token,
-    errors: null,
-  };
+    return {
+      success: true,
+      message: null,
+      token,
+      errors: null,
+    };
+  } catch (error) {
+    if (error instanceof HTTPError) {
+      const { message } = await error.response.json();
+      return {
+        success: false,
+        message,
+        errors: null,
+      };
+    }
+    return {
+      success: false,
+      message: 'An unexpected error occurred. Please try again later.',
+      errors: null,
+    };
+  }
 }
