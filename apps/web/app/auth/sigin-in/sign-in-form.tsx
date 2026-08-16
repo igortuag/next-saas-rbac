@@ -9,10 +9,11 @@ import { signInWithEmailAndPassword } from './actions';
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
 import { useActionState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export function SignInForm() {
-  const [state, formAction, isPending] = useActionState(
+  const [{ success, message, errors }, formAction, isPending] = useActionState(
     signInWithEmailAndPassword,
     {
       success: false,
@@ -24,19 +25,29 @@ export function SignInForm() {
 
   return (
     <form action={formAction} className="space-y-4">
+      {!success && message && (
+        <Alert variant="destructive">
+          <AlertTriangle className="size-4" />
+          <AlertTitle>Sign in failed!</AlertTitle>
+          <AlertDescription>
+            <p>{message}</p>
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="space-y-1">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" type="email" placeholder="E-mail" />
 
-        {state.errors?.email && (
-          <p className="text-xs text-destructive">{state.errors.email[0]}</p>
+        {errors?.email && (
+          <p className="text-xs text-destructive">{errors.email[0]}</p>
         )}
       </div>
       <div className="space-y-1">
         <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" placeholder="Password" />
-        {state.errors?.password && (
-          <p className="text-xs text-destructive">{state.errors.password[0]}</p>
+        {errors?.password && (
+          <p className="text-xs text-destructive">{errors.password[0]}</p>
         )}
         <Link
           href="/auth/forgot-password"
