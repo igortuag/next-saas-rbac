@@ -8,25 +8,32 @@ import Link from 'next/link';
 import { signInWithEmailAndPassword } from './actions';
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
-import { FormEvent, useActionState } from 'react';
+import { FormEvent, useState, useTransition } from 'react';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export function SignInForm() {
-  const [{ success, message, errors }, formAction, isPending] = useActionState(
-    signInWithEmailAndPassword,
-    {
-      success: false,
-      message: null,
-      errors: null,
-      token: undefined,
-    }
-  );
+  const [formState, setFormState] = useState<{
+    success: boolean;
+    message: string | null;
+    errors: Record<string, string[]> | null;
+  }>({
+    success: true,
+    message: null,
+    errors: null,
+  });
+  const { success, message, errors } = formState;
+  const [isPending, startTransition] = useTransition();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    formAction(formData);
+    const formData = event.currentTarget;
+    const data = new FormData(formData);
+
+    startTransition(async () => {
+      const state = await signInWithEmailAndPassword(data);
+      setFormState(state);
+    });
   }
 
   return (

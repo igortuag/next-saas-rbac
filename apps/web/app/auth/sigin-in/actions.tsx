@@ -10,7 +10,7 @@ const signInSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 });
 
-export async function signInWithEmailAndPassword(_: unknown, data: FormData) {
+export async function signInWithEmailAndPassword(data: FormData) {
   const result = signInSchema.safeParse(Object.fromEntries(data));
 
   if (!result.success) {
