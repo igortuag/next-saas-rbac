@@ -8,10 +8,15 @@ interface FormState {
 
 export function useFormState<T>(
   action: (data: FormData) => Promise<FormState>,
-  initialState: FormState
+  initialState?: FormState
 ) {
-  const [formState, setFormState] = useState<FormState>(initialState);
-  const { success, message, errors } = formState;
+  const [formState, setFormState] = useState<FormState>(
+    initialState ?? {
+      success: false,
+      message: null,
+      errors: null,
+    }
+  );
   const [isPending, startTransition] = useTransition();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -25,12 +30,5 @@ export function useFormState<T>(
     });
   }
 
-  return {
-    formState,
-    success,
-    message,
-    errors,
-    isPending,
-    handleSubmit,
-  };
+  return [formState, handleSubmit, isPending] as const;
 }
