@@ -8,33 +8,14 @@ import Link from 'next/link';
 import { signInWithEmailAndPassword } from './actions';
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
-import { FormEvent, useState, useTransition } from 'react';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useFormState } from '@/hooks/use-form-state';
 
 export function SignInForm() {
-  const [formState, setFormState] = useState<{
-    success: boolean;
-    message: string | null;
-    errors: Record<string, string[]> | null;
-  }>({
-    success: true,
-    message: null,
-    errors: null,
-  });
-  const { success, message, errors } = formState;
-  const [isPending, startTransition] = useTransition();
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = event.currentTarget;
-    const data = new FormData(formData);
-
-    startTransition(async () => {
-      const state = await signInWithEmailAndPassword(data);
-      setFormState(state);
-    });
-  }
+  const [{ success, message, errors }, handleSubmit, isPending] = useFormState(
+    signInWithEmailAndPassword
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
