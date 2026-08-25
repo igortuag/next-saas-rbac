@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { signInWithPassword } from '@/http/sign-in-with-password';
 import { HTTPError } from 'ky';
+import { cookies } from 'next/headers';
 
 const signInSchema = z.object({
   email: z.email('Invalid email address'),
@@ -29,6 +30,11 @@ export async function signInWithEmailAndPassword(data: FormData) {
     const { token } = await signInWithPassword({
       email: email,
       password: password,
+    });
+
+    (await cookies()).set('token', token, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
     return {
