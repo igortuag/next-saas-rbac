@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { signInWithPassword } from '@/http/sign-in-with-password';
 import { HTTPError } from 'ky';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const signInSchema = z.object({
   email: z.email('Invalid email address'),
@@ -37,12 +38,7 @@ export async function signInWithEmailAndPassword(data: FormData) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    return {
-      success: true,
-      message: null,
-      token,
-      errors: null,
-    };
+    redirect('/');
   } catch (error) {
     if (error instanceof HTTPError) {
       const { message } = await error.response.json();
