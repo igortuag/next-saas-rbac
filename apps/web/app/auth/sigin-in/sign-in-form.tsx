@@ -11,10 +11,17 @@ import Image from 'next/image';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useFormState } from '@/hooks/use-form-state';
+import { useRouter } from 'next/navigation';
 
 export function SignInForm() {
+  const router = useRouter();
+
   const [{ success, message, errors }, handleSubmit, isPending] = useFormState(
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    undefined,
+    () => {
+      router.push('/');
+    }
   );
 
   return (
