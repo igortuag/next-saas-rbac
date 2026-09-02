@@ -12,6 +12,7 @@ import { AlertTriangle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useFormState } from '@/hooks/use-form-state';
 import { useRouter } from 'next/navigation';
+import { signInWithGithub } from '../actions';
 
 export function SignInForm() {
   const router = useRouter();
@@ -68,7 +69,12 @@ export function SignInForm() {
 
       <Separator />
 
-      <Button type="button" variant="outline" className="w-full">
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+        formAction={signInWithGithub}
+      >
         <Image
           src={githubIcon}
           alt="Github"
