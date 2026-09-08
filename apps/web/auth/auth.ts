@@ -11,4 +11,7 @@ export async function auth() {
   if (!token) {
     redirect('/auth/sign-in');
   }
+
+  try {
+  } catch {}
 }
