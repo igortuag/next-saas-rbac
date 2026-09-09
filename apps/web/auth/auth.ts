@@ -1,3 +1,4 @@
+import { getProfile } from '@/http/get-profile';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -13,5 +14,12 @@ export async function auth() {
   }
 
   try {
-  } catch {}
+    const { user } = await getProfile();
+
+    return { user };
+  } catch {
+    (await cookies()).delete('token');
+  }
+
+  redirect('/auth/sign-in');
 }
