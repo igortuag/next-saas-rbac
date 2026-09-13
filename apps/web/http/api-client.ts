@@ -4,9 +4,11 @@ export const api = ky.create({
   prefix: process.env.NEXT_PUBLIC_API_URL,
   hooks: {
     beforeRequest: [
-      (request) => {
-        // You can modify the request here, e.g., add headers
-        return request;
+      ({ request }) => {
+        request.headers.set(
+          'Authorization',
+          `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`
+        );
       },
     ],
   },
