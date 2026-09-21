@@ -6,8 +6,21 @@ import Link from 'next/link';
 
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
+import { signInWithEmailAndPassword } from '../sigin-in/actions';
+import { useFormState } from '@/hooks/use-form-state';
+import { useRouter } from 'next/dist/client/components/navigation';
 
 export function SignUpForm() {
+  const router = useRouter();
+
+  const [{ success, message, errors }, handleSubmit, isPending] = useFormState(
+    signInWithEmailAndPassword,
+    undefined,
+    () => {
+      router.push('/');
+    }
+  );
+
   return (
     <form className="space-y-4">
       <div className="space-y-1">
