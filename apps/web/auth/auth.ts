@@ -17,7 +17,9 @@ export async function auth() {
     const { user } = await getProfile();
 
     return { user };
-  } catch {}
+  } catch (err) {
+    console.error('Failed to fetch profile:', err);
+  }
 
   redirect('/api/auth/sign-out');
 }
