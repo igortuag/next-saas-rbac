@@ -1,10 +1,9 @@
 'use server';
 
-import { success, z } from 'zod';
+import { z } from 'zod';
 
-import { SignInWithPasswordRequest } from '@/http/sign-in-with-password';
 import { HTTPError } from 'ky';
-import { cookies } from 'next/headers';
+import { SignUp } from '@/http/sign-up';
 
 const signUpSchema = z
   .object({
@@ -22,7 +21,7 @@ const signUpSchema = z
     path: ['confirmPassword'],
   });
 
-export async function signUpWithEmailAndPassword(data: FormData) {
+export async function signUpAction(data: FormData) {
   const result = signUpSchema.safeParse(Object.fromEntries(data));
 
   if (!result.success) {
@@ -35,24 +34,14 @@ export async function signUpWithEmailAndPassword(data: FormData) {
     };
   }
 
-  const { email, password } = result.data;
+  const { email, password, name } = result.data;
 
   try {
-    const { token } = await signUpWithPassword({
+    await SignUp({
+      name: name,
       email: email,
       password: password,
     });
-
-    (await cookies()).set('token', token, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
-
-    return {
-      success: true,
-      message: null,
-      errors: null,
-    };
   } catch (error) {
     if (error instanceof HTTPError) {
       const { message } = await error.response.json();
