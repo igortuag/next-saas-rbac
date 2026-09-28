@@ -42,6 +42,12 @@ export async function signUpAction(data: FormData) {
       email: email,
       password: password,
     });
+
+    return {
+      success: true,
+      message: undefined,
+      errors: null,
+    };
   } catch (error) {
     if (error instanceof HTTPError) {
       const { message } = await error.response.json();

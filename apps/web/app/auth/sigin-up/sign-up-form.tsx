@@ -6,34 +6,55 @@ import Link from 'next/link';
 
 import githubIcon from '@/assets/icons/github.svg';
 import Image from 'next/image';
-import { signInWithEmailAndPassword } from '../sigin-in/actions';
 import { useFormState } from '@/hooks/use-form-state';
 import { useRouter } from 'next/dist/client/components/navigation';
+import { signUpAction } from './actions';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { AlertTriangle } from 'lucide-react';
 
 export function SignUpForm() {
   const router = useRouter();
 
   const [{ success, message, errors }, handleSubmit, isPending] = useFormState(
-    signInWithEmailAndPassword,
+    signUpAction,
     undefined,
     () => {
-      router.push('/');
+      router.push('/auth/sign-in');
     }
   );
 
   return (
     <form className="space-y-4">
+      {!success && message && (
+        <Alert variant="destructive">
+          <AlertTriangle className="size-4" />
+          <AlertTitle>Sign up failed!</AlertTitle>
+          <AlertDescription>
+            <p>{message}</p>
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="space-y-1">
         <Label htmlFor="name">Name</Label>
         <Input id="name" placeholder="Name" />
+        {errors?.name && (
+          <p className="text-xs text-destructive">{errors.name[0]}</p>
+        )}
       </div>
       <div className="space-y-1">
         <Label htmlFor="email">E-mail</Label>
         <Input id="email" type="email" placeholder="E-mail" />
+        {errors?.email && (
+          <p className="text-xs text-destructive">{errors.email[0]}</p>
+        )}
       </div>
       <div className="space-y-1">
         <Label htmlFor="password">Password</Label>
         <Input id="password" type="password" placeholder="Password" />
+        {errors?.password && (
+          <p className="text-xs text-destructive">{errors.password[0]}</p>
+        )}
       </div>
       <div className="space-y-1">
         <Label htmlFor="confirm-password">Confirm Password</Label>
@@ -42,6 +63,11 @@ export function SignUpForm() {
           type="password"
           placeholder="Confirm Password"
         />
+        {errors?.confirmPassword && (
+          <p className="text-xs text-destructive">
+            {errors.confirmPassword[0]}
+          </p>
+        )}
       </div>
 
       <Button type="submit" className="w-full">
