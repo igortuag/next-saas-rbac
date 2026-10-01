@@ -10,7 +10,7 @@ import { useFormState } from '@/hooks/use-form-state';
 import { useRouter } from 'next/dist/client/components/navigation';
 import { signUpAction } from './actions';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import { signInWithGithub } from '../actions';
 
 export function SignUpForm() {
@@ -73,7 +73,11 @@ export function SignUpForm() {
         </div>
 
         <Button type="submit" className="w-full">
-          Create account
+          {isPending ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            'Create account'
+          )}
         </Button>
 
         <Button
