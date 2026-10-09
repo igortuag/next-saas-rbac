@@ -17,6 +17,10 @@ export default function Header() {
           />
         </svg>
       </div>
+
+      <div className="flex items-center gap-4">
+
+      </div>
     </header>
   );
 }
