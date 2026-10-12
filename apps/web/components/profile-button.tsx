@@ -1,4 +1,4 @@
-import { ChevronDown, Link, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
   DropdownMenu,
@@ -7,20 +7,32 @@ import {
   DropdownMenuItem,
 } from './ui/dropdown-menu';
 import Link from 'next/link';
+import { auth } from '@/auth/auth';
 
-export function ProfileButton() {
+const getInitials = (name: string) => {
+  return (
+    name
+      ?.split(' ')
+      .map((n) => n[0])
+      .join('') ?? 'U'
+  );
+};
+
+export async function ProfileButton() {
+  const { user } = await auth();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-3 outline-none">
         <div className="flex flex-col items-end">
-          <span className="text-sm font-medium">Igor Tuag</span>
-          <span className="text-xs text-muted-foreground">
-            igor.tuag@example.com
-          </span>
+          <span className="text-sm font-medium">{user.name}</span>
+          <span className="text-xs text-muted-foreground">{user.email}</span>
         </div>
         <Avatar>
-          <AvatarImage src="https://example.com/avatar.jpg" alt="Igor Tuag" />
-          <AvatarFallback>IT</AvatarFallback>
+          {user.avatarUrl && (
+            <AvatarImage src={user.avatarUrl} alt={user.name} />
+          )}
+          <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
         </Avatar>
         <ChevronDown className="size-4 text-muted-foreground" />
       </DropdownMenuTrigger>
