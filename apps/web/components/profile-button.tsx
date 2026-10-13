@@ -6,7 +6,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from './ui/dropdown-menu';
-import Link from 'next/link';
 import { auth } from '@/auth/auth';
 
 const getInitials = (name: string) => {
@@ -39,10 +38,10 @@ export async function ProfileButton() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           render={() => (
-            <Link href="/api/auth/sign-out">
+            <a href="/api/auth/sign-out">
               <LogOut className="size-4 mr-2" />
               Sign Out
-            </Link>
+            </a>
           )}
         />
       </DropdownMenuContent>
