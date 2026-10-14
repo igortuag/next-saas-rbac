@@ -1,3 +1,6 @@
+import { OrganizationSwitcher } from './organization-switcher';
+import { ProfileButton } from './profile-button';
+
 export default function Header() {
   return (
     <header className="mx-auto flex max-w-[1200px] items-center justify-between">
@@ -16,10 +19,12 @@ export default function Header() {
             d="M12 4v16m8-8H4"
           />
         </svg>
+
+        <OrganizationSwitcher />
       </div>
 
       <div className="flex items-center gap-4">
-
+        <ProfileButton />
       </div>
     </header>
   );
