@@ -1,3 +1,4 @@
+import { Slash } from 'lucide-react';
 import { OrganizationSwitcher } from './organization-switcher';
 import { ProfileButton } from './profile-button';
 
@@ -19,6 +20,8 @@ export default function Header() {
             d="M12 4v16m8-8H4"
           />
         </svg>
+
+        <Slash className="size-3 -rotate-[24deg] text-border" />
 
         <OrganizationSwitcher />
       </div>
