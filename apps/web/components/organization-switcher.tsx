@@ -2,6 +2,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
@@ -22,13 +23,15 @@ export function OrganizationSwitcher() {
         sideOffset={12}
         className="w-[200px]"
       >
-        <DropdownMenuLabel>Organizations</DropdownMenuLabel>
-        <DropdownMenuItem>
-          <Avatar className="mr-2 size-5">
-            <AvatarImage src="https://via.placeholder.com/150"></AvatarImage>
-          </Avatar>
-          Organization 1
-        </DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Organizations</DropdownMenuLabel>
+          <DropdownMenuItem>
+            <Avatar className="mr-2 size-5">
+              <AvatarImage src="https://via.placeholder.com/150"></AvatarImage>
+            </Avatar>
+            Organization 1
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
