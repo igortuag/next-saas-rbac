@@ -33,6 +33,12 @@ export function OrganizationSwitcher() {
             </Avatar>
             Organization 1
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Avatar className="mr-2 size-4">
+              <AvatarImage src="https://via.placeholder.com/150"></AvatarImage>
+            </Avatar>
+            Organization 2
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
