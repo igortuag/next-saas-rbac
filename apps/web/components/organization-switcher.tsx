@@ -10,8 +10,11 @@ import {
 } from './ui/dropdown-menu';
 import { Avatar, AvatarImage } from './ui/avatar';
 import Link from 'next/link';
+import { getOrganizations } from '@/http/get-organizations';
 
-export function OrganizationSwitcher() {
+export async function OrganizationSwitcher() {
+  const { organizations } = await getOrganizations();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex w-[168px] items-center gap-2 rounded p-1 text-sm font-medium outiline-none focus-visible:ring-2 focus-visible:ring-primary">
@@ -27,18 +30,14 @@ export function OrganizationSwitcher() {
       >
         <DropdownMenuGroup>
           <DropdownMenuLabel>Organizations</DropdownMenuLabel>
-          <DropdownMenuItem>
-            <Avatar className="mr-2 size-4">
-              <AvatarImage src="https://via.placeholder.com/150"></AvatarImage>
-            </Avatar>
-            Organization 1
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Avatar className="mr-2 size-4">
-              <AvatarImage src="https://via.placeholder.com/150"></AvatarImage>
-            </Avatar>
-            Organization 2
-          </DropdownMenuItem>
+          {organizations.map((organization) => (
+            <DropdownMenuItem key={organization.id}>
+              <Avatar className="mr-2 size-4">
+                <AvatarImage src={organization.avatarUrl}></AvatarImage>
+              </Avatar>
+              {organization.name}
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
