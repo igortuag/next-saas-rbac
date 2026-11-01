@@ -34,7 +34,7 @@ export async function OrganizationSwitcher() {
             <DropdownMenuItem
               key={organization.id}
               render={
-                <Link href={`/organization/${organization.id}`}>
+                <Link href={`/org/${organization.slug}`}>
                   {organization.avatarUrl && (
                     <Avatar className="mr-2 size-4">
                       <AvatarImage src={organization.avatarUrl}></AvatarImage>
