@@ -14,13 +14,31 @@ import { getOrganizations } from '@/http/get-organizations';
 import { cookies } from 'next/headers';
 
 export async function OrganizationSwitcher() {
-  const currentOrganization = (await cookies())?.get('currentOrganization');
+  const currentOrg = (await cookies())?.get('org');
   const { organizations } = await getOrganizations();
+  const currentOrganization = organizations.find(
+    (org) => org.id === currentOrg?.value
+  );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex w-[168px] items-center gap-2 rounded p-1 text-sm font-medium outiline-none focus-visible:ring-2 focus-visible:ring-primary">
-        <span>Select organization</span>
+        <span className="truncate">
+          {currentOrganization ? (
+            <>
+              {currentOrganization.avatarUrl && (
+                <Avatar className="mr-2 size-4">
+                  <AvatarImage
+                    src={currentOrganization.avatarUrl}
+                  ></AvatarImage>
+                </Avatar>
+              )}
+              {currentOrganization.name}
+            </>
+          ) : (
+            'Select organization'
+          )}
+        </span>
         <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
       </DropdownMenuTrigger>
 
