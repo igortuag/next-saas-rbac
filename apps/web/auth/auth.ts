@@ -6,6 +6,27 @@ export async function isAuthenticated() {
   return (await cookies()).get('token')?.value;
 }
 
+export async function getCurrentOrg() {
+  return (await cookies()).get('org')?.value ?? null;
+}
+
+export async function getCurrentMembership() {
+  const token = (await cookies()).get('token')?.value;
+
+  if (!token) {
+    redirect('/auth/sign-in');
+  }
+
+  try {
+    const { user } = await getProfile();
+    return user?.membership;
+  } catch (err) {
+    console.error('Failed to fetch profile:', err);
+  }
+
+  redirect('/api/auth/sign-out');
+}
+
 export async function auth() {
   const token = (await cookies()).get('token')?.value;
 
