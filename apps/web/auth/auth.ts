@@ -11,20 +11,10 @@ export async function getCurrentOrg() {
 }
 
 export async function getCurrentMembership() {
-  const token = (await cookies()).get('token')?.value;
-
-  if (!token) {
-    redirect('/auth/sign-in');
+  const org = await getCurrentOrg();
+  if (!org) {
+    return null;
   }
-
-  try {
-    const { user } = await getProfile();
-    return user?.membership;
-  } catch (err) {
-    console.error('Failed to fetch profile:', err);
-  }
-
-  redirect('/api/auth/sign-out');
 }
 
 export async function auth() {
