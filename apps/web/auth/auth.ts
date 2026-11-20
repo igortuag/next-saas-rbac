@@ -1,3 +1,4 @@
+import { getMembership } from '@/http/get-membership';
 import { getProfile } from '@/http/get-profile';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -15,6 +16,9 @@ export async function getCurrentMembership() {
   if (!org) {
     return null;
   }
+
+  const { membership } = await getMembership(org);
+  return membership;
 }
 
 export async function auth() {

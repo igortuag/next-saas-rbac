@@ -1,9 +1,10 @@
+import { Role } from '@saas/auth';
 import { api } from './api-client';
 
 export interface GetMembershipResponse {
   membership: {
     id: string;
-    role: 'ADMIN' | 'MEMBER' | 'BILLING';
+    role: Role;
     organizationId: string;
   };
 }
