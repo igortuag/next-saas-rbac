@@ -28,7 +28,10 @@ export async function ability() {
     return null;
   }
 
-  const ability = defineAbilitiesFor(membership);
+  const ability = defineAbilitiesFor({
+    id: membership.userId,
+    role: membership.role,
+  });
   return ability;
 }
 
